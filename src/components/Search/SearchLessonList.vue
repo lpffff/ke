@@ -1,20 +1,11 @@
 <template>
-<div class="row">
-  <ul>
-    <MFilterLi />
-  </ul>
-  <div class="lesson-list">
-    <div class="list-head">
-      <h2>
-        <i class="icon-title"></i>
-        <span class="title">标题：{{title}}</span>
-        <router-link to="search" class="more" :knowledge-type="knowledge_type">更多&gt;</router-link>
-      </h2>
+  <div class="row">
+    <div class="list-wrap3"><MFilterLi :filterLiData="filterLiData" /></div>
+    <div class="lesson-list">
+      <div class="list-content">
+        <LessonWrap :lessonWrapData="lessonWrapData" />
+      </div>
     </div>
-    <div class="list-content">
-      <LessonWrap :lessonWrapData="data.lessonData" />
-    </div>
-  </div>
   </div>
 </template>
 
@@ -26,7 +17,8 @@ import LessonWrap from "../LessonWrap.vue";
 export default {
   name: "LessonList",
   components: {
-    LessonWrap,MFilterLi
+    LessonWrap,
+    MFilterLi
   },
   props: {
     title: String,
@@ -36,9 +28,7 @@ export default {
   },
   data() {
     return {
-      data: {
-        lessonData: []
-      }
+      data: {}
     };
   },
   beforeCreate: function() {
@@ -55,6 +45,5 @@ export default {
 };
 </script>
 
-<style scoped>
-.lesson {float: left;}
+<style>
 </style>

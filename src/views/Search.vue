@@ -1,15 +1,20 @@
 <template>
-  <div>
+  <div class="container">
+    <div class="main-left">
     <div id="filterLesson" class="filter-lesson">
       <ul class="list-wrap list-wrap1">
         <MFilterLi v-for="(item, index) in data.filterData[0]" :key="index" :filterLiData="item" />
       </ul>
       <ul class="list-wrap list-wrap2">
-        <MFilterLi :key="index" :filterLiData="data.filterData[1]" />
+        <MFilterLi :filterLiData="data.filterData[1]" />
       </ul>
       <MFilterSearchBox />
     </div>
-    <LessonWrap :lessonWrapData="data.lessonData" :filterLiData="data.filterData[2]" />
+    <SearchLessonList :lessonWrapData="data.lessonData" :filterLiData="data.filterData[2]" />
+  </div>
+  <div class="main-right">
+    <RecommendList :lessonWrapData="data.guessData" title="推荐课程" />
+  </div>
   </div>
 </template>
 
@@ -17,13 +22,15 @@
 import axios from "axios";
 import MFilterLi from "../components/MFilterLi";
 import MFilterSearchBox from "../components/MFilterSearchBox";
-import LessonWrap from "../components/LessonWrap";
+import SearchLessonList from "../components/Search/SearchLessonList";
+import RecommendList from "../components/Search/RecommendList"
 export default {
   name: "Search",
   components: {
     MFilterLi,
-    LessonWrap,
-    MFilterSearchBox
+    MFilterSearchBox,
+    SearchLessonList,
+    RecommendList
   },
   data() {
     return {
@@ -81,16 +88,24 @@ export default {
             data_active: ""
           }
         ],
-        lessonData: []
+        lessonData: [],
+        guessData:[]
       }
     };
   },
   beforeCreate: function() {
-    axios
-      .post("/", {})
+    axios.post("/", {})
       .then(response => {
         window.console.log(response);
         this.data.lessonData = response.data.lesson_list.children;
+      })
+      .catch(function(error) {
+        window.console.log(error);
+      });
+    axios.post("/guess", {})
+      .then(response => {
+        window.console.log(response);
+        this.data.guessData = response.data.lesson_list.children;
       })
       .catch(function(error) {
         window.console.log(error);
@@ -101,6 +116,8 @@ export default {
 
 <style scoped>
 /*搜索筛选*/
+.main-left {position: relative;float: left;width: 954px;margin-right: 40px;}
+.main-right {position: relative;float: left;width: 204px;}
 .filter-list-wrap.list-wrap3 {
   padding-left: 0;
   border-bottom: 1px solid #f0f0f0;
@@ -112,10 +129,13 @@ export default {
 .filter-lesson .list-wrap2 .item {
   border-radius: 0;
 }
-#liveTypeWrap {
+
+</style>
+<style>
+.list-wrap3 {
   margin-top: 16px;
 }
-#liveTypeWrap .item {
+.list-wrap3 .item {
   float: left;
   margin-right: 40px;
   font-size: 16px;
@@ -125,7 +145,7 @@ export default {
   line-height: 44px;
   border-bottom: 4px solid transparent;
 }
-#liveTypeWrap .item.active {
+.list-wrap3 .item.active {
   color: #1ebb51;
   border-color: #1ebb51;
 }

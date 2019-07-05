@@ -1,5 +1,5 @@
 <template>
-  <div class="hello">
+  <div class="container">
     <img alt="Vue logo" src="../assets/img/logo.png" />
     <div class="filter-lesson">
       <ul class="list-wrap">
@@ -59,13 +59,15 @@ export default {
         }
       ]
     };
+  },
+  methods: {
   }
 };
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-.hello {
+.container {
   background: url(/static/images/404.jpg) no-repeat center;
 }
 h3 {
@@ -97,14 +99,14 @@ a {
   -ms-user-select: none;
   user-select: none;
 }
-</style>
-<style>
 .lesson-list {
   position: relative;
   width: 1200px;
   margin: 40px auto 0 auto;
   padding-bottom: 10px;
 }
+</style>
+<style>
 .lesson-list h2 {
   overflow: hidden;
 }
@@ -152,7 +154,7 @@ a {
   position: relative;
   height: 225px;
   margin-bottom: 30px;
-  margin-left: 20px;
+  margin-left: 19px;
   border-radius: 5px;
   cursor: pointer;
 }
