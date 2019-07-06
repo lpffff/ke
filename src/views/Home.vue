@@ -3,12 +3,13 @@
     <img alt="Vue logo" src="../assets/img/logo.png" />
     <div class="filter-lesson">
       <ul class="list-wrap">
-        <MFilterLi v-for="(item, index) in filterData" :key="index" :filterLiData="item" />
+        <MFilterLi  :filterLiData="filterData.cat" />
+        <MFilterLi  :filterLiData="filterData.tag_id" />
       </ul>
       <MFilterSearchBox />
     </div>
-    <HomeLessonList title="公开课" :knowledge-type="1" />
-    <HomeLessonList title="系列课" :knowledge-type="2" />
+    <HomeLessonList title="公开课" :knowledge_type="1" />
+    <HomeLessonList title="系列课" :knowledge_type="2" />
   </div>
 </template>
 
@@ -30,34 +31,7 @@ export default {
   },
   data() {
     return {
-      filterData: [
-        {
-          type: "cat",
-          id: "catWrap",
-          front: "年级",
-          children: [
-            { data_num: "", text: "全部" },
-            { data_num: "13", text: "四年级" },
-            { data_num: "14", text: "五年级" },
-            { data_num: "15", text: "六年级" }
-          ],
-          data_active: ""
-        },
-        {
-          type: "tag_id",
-          id: "tagWrap",
-          front: "学科",
-          children: [
-            { data_num: "", text: "全部" },
-            { data_num: "1", text: "语文" },
-            { data_num: "2", text: "数学" },
-            { data_num: "3", text: "英语" },
-            { data_num: "4", text: "物理" },
-            { data_num: "5", text: "化学" }
-          ],
-          data_active: ""
-        }
-      ]
+      filterData: this.$store.state.filterData
     };
   },
   methods: {

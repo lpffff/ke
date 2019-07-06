@@ -1,6 +1,5 @@
 <template>
-  <li class="list-li clearfix" :id="data.id">
-    {{this.$store.state.cat}}
+  <li class="list-li clearfix" :id="data.id" :data-type="data.type">
     <span class="front">{{ data.front}}</span>
     <div class="item-wrap clearboth">
       <span
@@ -9,7 +8,7 @@
         class="item"
         :class="item.data_num == data.data_active ? 'active' : '' "
         :data-num="item.data_num ? item.data_num : ''"
-        @click="handleChange();addCat();"
+        @click="handleChange"
       >{{item.text}}</span>
     </div>
   </li>
@@ -28,12 +27,20 @@ export default {
   },
   methods: {
     handleChange: function() {
-      const data_num = event.target.getAttribute("data-num");
-      this.data.data_active = data_num;
+      const active_data_num = event.target.getAttribute("data-num");
+      const param = {};
+      param[this.data.type] = active_data_num;
+      this.$store.dispatch("handleFilterFun", param)
     },
-    addCat: function(){
-      this.$store.state.cat++;
-    }
+    // addCat: function(){
+    //   this.$store.commit("add");
+    // },
+    // addCat(){
+    //   this.$store.dispatch("addFun");
+    // },
+    // reductionFun(){
+    //   this.$store.dispatch("reductionFun");
+    // }
   },
   beforeMount: function() {
     this.store1 = this.$store.state;

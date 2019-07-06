@@ -31,7 +31,7 @@ export default {
     axios
       .post("/guess", {})
       .then(response => {
-        window.console.log(response);
+        // window.console.log(response);
         this.data.lessonData = response.data.lesson_list.children;
       })
       .catch(function(error) {

@@ -35,12 +35,15 @@ export default {
     axios
       .post("/", {})
       .then(response => {
-        window.console.log(response);
+        // window.console.log(response);
         this.data.lessonData = response.data.lesson_list.children;
       })
       .catch(function(error) {
         window.console.log(error);
       });
+  },
+  mounted: function(){
+    window.console.log(this.$store.state);
   }
 };
 </script>

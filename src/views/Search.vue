@@ -1,20 +1,21 @@
 <template>
   <div class="container">
     <div class="main-left">
-    <div id="filterLesson" class="filter-lesson">
-      <ul class="list-wrap list-wrap1">
-        <MFilterLi v-for="(item, index) in data.filterData[0]" :key="index" :filterLiData="item" />
-      </ul>
-      <ul class="list-wrap list-wrap2">
-        <MFilterLi :filterLiData="data.filterData[1]" />
-      </ul>
-      <MFilterSearchBox />
+      <div id="filterLesson" class="filter-lesson">
+        <ul class="list-wrap list-wrap1">
+          <MFilterLi :filterLiData="this.$store.state.filterData.cat" />
+          <MFilterLi :filterLiData="this.$store.state.filterData.tag_id" />
+        </ul>
+        <ul class="list-wrap list-wrap2">
+          <MFilterLi :filterLiData="this.$store.state.filterData.knowledge_type" />
+        </ul>
+        <MFilterSearchBox />
+      </div>
+      <SearchLessonList :lessonWrapData="data.lessonData" :filterLiData="this.$store.state.filterData.live_type" />
     </div>
-    <SearchLessonList :lessonWrapData="data.lessonData" :filterLiData="data.filterData[2]" />
-  </div>
-  <div class="main-right">
-    <RecommendList :lessonWrapData="data.guessData" title="推荐课程" />
-  </div>
+    <div class="main-right">
+      <RecommendList :lessonWrapData="data.guessData" title="推荐课程" />
+    </div>
   </div>
 </template>
 
@@ -23,7 +24,7 @@ import axios from "axios";
 import MFilterLi from "../components/MFilterLi";
 import MFilterSearchBox from "../components/MFilterSearchBox";
 import SearchLessonList from "../components/Search/SearchLessonList";
-import RecommendList from "../components/Search/RecommendList"
+import RecommendList from "../components/Search/RecommendList";
 export default {
   name: "Search",
   components: {
@@ -36,34 +37,32 @@ export default {
     return {
       data: {
         filterData: [
-          [
-            {
-              type: "cat",
-              id: "catWrap",
-              front: "年级",
-              children: [
-                { data_num: "", text: "全部" },
-                { data_num: "13", text: "四年级" },
-                { data_num: "14", text: "五年级" },
-                { data_num: "15", text: "六年级" }
-              ],
-              data_active: ""
-            },
-            {
-              type: "tag_id",
-              id: "tagWrap",
-              front: "学科",
-              children: [
-                { data_num: "", text: "全部" },
-                { data_num: "1", text: "语文" },
-                { data_num: "2", text: "数学" },
-                { data_num: "3", text: "英语" },
-                { data_num: "4", text: "物理" },
-                { data_num: "5", text: "化学" }
-              ],
-              data_active: ""
-            }
-          ],
+          {
+            type: "cat",
+            id: "catWrap",
+            front: "年级",
+            children: [
+              { data_num: "", text: "全部" },
+              { data_num: "13", text: "四年级" },
+              { data_num: "14", text: "五年级" },
+              { data_num: "15", text: "六年级" }
+            ],
+            data_active: ""
+          },
+          {
+            type: "tag_id",
+            id: "tagWrap",
+            front: "学科",
+            children: [
+              { data_num: "", text: "全部" },
+              { data_num: "1", text: "语文" },
+              { data_num: "2", text: "数学" },
+              { data_num: "3", text: "英语" },
+              { data_num: "4", text: "物理" },
+              { data_num: "5", text: "化学" }
+            ],
+            data_active: ""
+          },
           {
             type: "knowledge_type",
             id: "knowledgeWrap",
@@ -89,22 +88,24 @@ export default {
           }
         ],
         lessonData: [],
-        guessData:[]
+        guessData: []
       }
     };
   },
   beforeCreate: function() {
-    axios.post("/", {})
+    axios
+      .post("/", {})
       .then(response => {
-        window.console.log(response);
+        // window.console.log(response);
         this.data.lessonData = response.data.lesson_list.children;
       })
       .catch(function(error) {
         window.console.log(error);
       });
-    axios.post("/guess", {})
+    axios
+      .post("/guess", {})
       .then(response => {
-        window.console.log(response);
+        // window.console.log(response);
         this.data.guessData = response.data.lesson_list.children;
       })
       .catch(function(error) {
@@ -116,8 +117,17 @@ export default {
 
 <style scoped>
 /*搜索筛选*/
-.main-left {position: relative;float: left;width: 954px;margin-right: 40px;}
-.main-right {position: relative;float: left;width: 204px;}
+.main-left {
+  position: relative;
+  float: left;
+  width: 954px;
+  margin-right: 40px;
+}
+.main-right {
+  position: relative;
+  float: left;
+  width: 204px;
+}
 .filter-list-wrap.list-wrap3 {
   padding-left: 0;
   border-bottom: 1px solid #f0f0f0;
@@ -129,7 +139,6 @@ export default {
 .filter-lesson .list-wrap2 .item {
   border-radius: 0;
 }
-
 </style>
 <style>
 .list-wrap3 {

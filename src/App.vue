@@ -13,7 +13,7 @@ export default {
 </script>
 
 <style scoped>
-@import './assets/css/filter.css';
+/* @import './assets/css/filter.css'; */
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
