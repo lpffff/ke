@@ -14,7 +14,27 @@ Mock.mock("/", {
             knowledge_type: 1,
             live_type: 2,
             is_live: 3,
-            start_course_time: 1558454400,
+            start_course_time: function(){
+                const start_course_time = (new Date(Mock.mock('@time()'))).getTime();
+                return start_course_time;
+            },
+            end_course_time: 1558454400,
+        }]
+    }
+})
+Mock.mock("/guess", {
+    "lesson_list": {
+        "children|5": [{
+            knowledge_name: Mock.mock('@ctitle(5)'),
+            knowledge_pic: Mock.mock('@image'),
+            view_num: 999,
+            student_num: 333,
+            course_num: 9,
+            wx_course_price: "9.99",
+            start_course_time: function(){
+                const start_course_time = (new Date(Mock.mock('@time()'))).getTime();
+                return start_course_time;
+            },
             end_course_time: 1558454400,
         }]
     }

@@ -1,9 +1,9 @@
 <template>
-  <div class="lesson-list">
+  <div class="lesson-list lesson-list_home">
     <div class="list-head">
       <h2>
         <i class="icon-title"></i>
-        <span class="title">标题：{{title}}</span>
+        <span class="title">{{title}}</span>
         <router-link to="search" class="more" :knowledge-type="knowledge_type">更多&gt;</router-link>
       </h2>
     </div>
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+// import qs from "qs";
 import axios from "axios";
 import LessonWrap from "../LessonWrap.vue";
 
@@ -24,29 +25,70 @@ export default {
   },
   props: {
     title: String,
-    knowledge_type: String
+    knowledge_type: Number
   },
   data() {
     return {
       data: {
-        lessonData: []
+        lessonData: [],
+        filterData: {},
+        filterCondition: {}
       }
     };
   },
-  beforeCreate: function() {
-    axios
-      .post("/", {})
-      .then(response => {
-        window.console.log(response);
-        this.data.lessonData = response.data.lesson_list.children;
-      })
-      .catch(function(error) {
-        window.console.log(error);
-      });
+  methods: {
+    setListData: function() {
+      const _filterCondition = this.data.filterCondition;
+      window.console.log(_filterCondition);
+      let url = `/api.php?act=opencourse&method=lists_by_knowledge&count=${_filterCondition.count}&channel_id=${_filterCondition.channel_id}&limit=${_filterCondition.limit}`;
+      if (_filterCondition.cat != "") {
+        url += `&cat=${_filterCondition.cat}`;
+      }
+      if (_filterCondition.tag_id != "") {
+        this.url += `&cat=${_filterCondition.tag_id}`;
+      }
+      if (_filterCondition.knowledge_type != "") {
+        this.url += `&cat=${_filterCondition.knowledge_type}`;
+      }
+      if (_filterCondition.live_type != "") {
+        this.url += `&cat=${_filterCondition.live_type}`;
+      }
+      window.console.log(url);
+      axios
+        .post(url)
+        .then(response => {
+          // window.console.log(this.data);
+          this.data.lessonData = response.data.data;
+        })
+        // .then(function(response) {
+        //   window.console.log(this.data);
+        //   this.data.lessonData = response.data.data;
+        // })
+        .catch(error => {
+          window.console.log(error);
+        });
+    }
+  },
+  beforeMount: function() {
+    window.console.log(this.$store);
+    let _filterData = this.$store.state.filterData;
+    
+    this.data.filterCondition = {
+      cat: _filterData["cat"].data_active,
+      tag_id: _filterData["tag_id"].data_active,
+      limit: 0,
+      count: 10,
+      knowledge_type: this.knowledge_type,
+      channel_id: 1
+    };
+    this.setListData();
+    window.console.log(this.data);
   }
 };
 </script>
 
 <style scoped>
-.lesson {float: left;}
+.lesson-list_home .lesson {
+  float: left;
+}
 </style>
