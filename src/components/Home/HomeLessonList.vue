@@ -31,7 +31,7 @@ export default {
     return {
       data: {
         lessonData: [],
-        filterData: {},
+        filterData: this.$store.state.filterData,
         filterCondition: {}
       }
     };
@@ -54,25 +54,26 @@ export default {
         this.url += `&cat=${_filterCondition.live_type}`;
       }
       window.console.log(url);
-      axios
-        .post(url)
-        .then(response => {
-          // window.console.log(this.data);
-          this.data.lessonData = response.data.data;
-        })
-        // .then(function(response) {
-        //   window.console.log(this.data);
-        //   this.data.lessonData = response.data.data;
-        // })
-        .catch(error => {
-          window.console.log(error);
-        });
+      // axios
+      //   .post(url)
+      //   .then(response => {
+      //     // window.console.log(this.data);
+      //     this.data.lessonData = response.data.data;
+      //   })
+      //   // .then(function(response) {
+      //   //   window.console.log(this.data);
+      //   //   this.data.lessonData = response.data.data;
+      //   // })
+      //   .catch(error => {
+      //     window.console.log(error);
+      //   });
     }
   },
   beforeMount: function() {
+    console.log("beforeMount");
     window.console.log(this.$store);
-    let _filterData = this.$store.state.filterData;
-    
+    let _filterData = Object.assign({}, this.$store.state.filterData);
+    console.log(_filterData);
     this.data.filterCondition = {
       cat: _filterData["cat"].data_active,
       tag_id: _filterData["tag_id"].data_active,
@@ -83,6 +84,35 @@ export default {
     };
     this.setListData();
     window.console.log(this.data);
+  },
+  computed: {
+    filterData() {
+      return this.data.filterData;
+    }
+  },
+  watch: {
+    // data: {
+    //   handler(newValue, oldValue) {
+    //     console.log("变了");
+    //     console.log(newValue);
+    //   },
+    //   deep: true
+    // },
+    filterData: {
+      handler(newValue, oldValue) {
+        console.log("变了");
+        console.log(newValue);
+        this.setListData();
+      },
+      deep: true
+    }
+  },
+  mounted: function() {
+    console.log("mounted");
+    const _this = this;
+  },
+  beforeUpdate() {
+    console.log(this.filterData);
   }
 };
 </script>
