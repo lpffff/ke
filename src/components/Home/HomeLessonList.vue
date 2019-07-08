@@ -30,16 +30,17 @@ export default {
   data() {
     return {
       data: {
-        lessonData: [],
-        filterData: {},
-        filterCondition: {}
+        test: 1,
+        filterData: this.$store.state.filterData,
+        filterCondition: this.$store.getters.searchFilterCondition,
+        lessonData: []
       }
     };
   },
   methods: {
-    setListData: function() {
+    updateLessonData() {
+      window.console.log(this);
       const _filterCondition = this.data.filterCondition;
-      window.console.log(_filterCondition);
       let url = `/api.php?act=opencourse&method=lists_by_knowledge&count=${_filterCondition.count}&channel_id=${_filterCondition.channel_id}&limit=${_filterCondition.limit}`;
       if (_filterCondition.cat != "") {
         url += `&cat=${_filterCondition.cat}`;
@@ -53,12 +54,13 @@ export default {
       if (_filterCondition.live_type != "") {
         this.url += `&cat=${_filterCondition.live_type}`;
       }
+      window.console.log("url");
       window.console.log(url);
       axios
         .post(url)
         .then(response => {
-          // window.console.log(this.data);
           this.data.lessonData = response.data.data;
+          window.console.log(this.data);
         })
         // .then(function(response) {
         //   window.console.log(this.data);
@@ -69,20 +71,31 @@ export default {
         });
     }
   },
+  watch: {
+    filterData: {
+      handler(val, oldVal) {
+        window.console.log("1");
+      },
+      deep: true
+    }
+  },
+  created: function() {
+    this.updateLessonData();
+    window.console.log("created");
+    this.data.test = "created";
+  },
   beforeMount: function() {
-    window.console.log(this.$store);
-    let _filterData = this.$store.state.filterData;
-    
-    this.data.filterCondition = {
-      cat: _filterData["cat"].data_active,
-      tag_id: _filterData["tag_id"].data_active,
-      limit: 0,
-      count: 10,
-      knowledge_type: this.knowledge_type,
-      channel_id: 1
-    };
-    this.setListData();
+    this.data.test = "beforeMount";
+  },
+  mounted: function() {
+    window.console.log("mounted");
     window.console.log(this.data);
+  },
+  beforeUpdate: function() {
+    this.data.test = "beforeUpdate";
+  },
+  updated: function() {
+    this.data.test = "updated";
   }
 };
 </script>

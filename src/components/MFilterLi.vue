@@ -1,5 +1,5 @@
 <template>
-  <li class="list-li clearfix" :id="data.id" :data-type="data.type">
+  <li class="list-li clearfix" :id="data.id" :data-type="data.type" >
     <span class="front">{{ data.front}}</span>
     <div class="item-wrap clearboth">
       <span
@@ -31,16 +31,8 @@ export default {
       const param = {};
       param[this.data.type] = active_data_num;
       this.$store.dispatch("handleFilterFun", param)
+      window.console.log(this.$store.state.filterData.cat.data_active);
     },
-    // addCat: function(){
-    //   this.$store.commit("add");
-    // },
-    // addCat(){
-    //   this.$store.dispatch("addFun");
-    // },
-    // reductionFun(){
-    //   this.$store.dispatch("reductionFun");
-    // }
   },
   beforeMount: function() {
     this.store1 = this.$store.state;
