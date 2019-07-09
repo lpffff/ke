@@ -7,7 +7,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     count: 1,
-    filterData: {
+    filterData: JSON.parse(localStorage.getItem("filterData"))
+      || {
       cat: {
         type: "cat",
         id: "catWrap",
@@ -16,7 +17,13 @@ export default new Vuex.Store({
           { data_num: "", text: "全部" },
           { data_num: "13", text: "四年级" },
           { data_num: "14", text: "五年级" },
-          { data_num: "15", text: "六年级" }
+          { data_num: "15", text: "六年级" },
+          { data_num: "6", text: "初一" },
+          { data_num: "5", text: "初二" },
+          { data_num: "4", text: "初三" },
+          { data_num: "3", text: "高一" },
+          { data_num: "2", text: "高二" },
+          { data_num: "1", text: "高三" }
         ],
         data_active: ""
       },
@@ -95,64 +102,8 @@ export default new Vuex.Store({
     handleFilter(state, param) {
       const type = Object.keys(param)[0];
       state.filterData[type].data_active = param[type];
+      localStorage.setItem("filterData", JSON.stringify(state.filterData));
     },
-    homeFilterLessonData(state, getters, param){
-      const sfc = getters.searchFilterCondition;
-      let url = `/api.php?act=opencourse&method=lists_by_knowledge&count=${
-        sfc.count
-      }&channel_id=${sfc.channel_id}&limit=${sfc.limit}`;
-      if (sfc.cat != "") {
-        url += `&cat=${sfc.cat}`;
-      }
-      if (sfc.tag_id != "") {
-        this.url += `&cat=${sfc.tag_id}`;
-      }
-      this.url += `&cat=${param.knowledge_type}`;
-      window.console.log("url");
-      window.console.log(url);
-      let homeFilterLessonData = [];
-      axios
-        .post(url)
-        .then(response => {
-          window.console.log(response);
-          homeFilterLessonData = response.data.data;
-          return homeFilterLessonData;
-        })
-        .catch(error => {
-          window.console.log(error);
-        });
-    },
-    searchFilterLessonData(state, getters){
-      const sfc = getters.searchFilterCondition;
-      let url = `/api.php?act=opencourse&method=lists_by_knowledge&count=${
-        sfc.count
-      }&channel_id=${sfc.channel_id}&limit=${sfc.limit}`;
-      if (sfc.cat != "") {
-        url += `&cat=${sfc.cat}`;
-      }
-      if (sfc.tag_id != "") {
-        this.url += `&cat=${sfc.tag_id}`;
-      }
-      if (sfc.knowledge_type != "") {
-        this.url += `&cat=${sfc.knowledge_type}`;
-      }
-      if (sfc.live_type != "") {
-        this.url += `&cat=${sfc.live_type}`;
-      }
-      window.console.log("url");
-      window.console.log(url);
-      let searchFilterLessonData = [];
-      axios
-        .post(url)
-        .then(response => {
-          window.console.log(response);
-          searchFilterLessonData = response.data.data;
-          return searchFilterLessonData;
-        })
-        .catch(error => {
-          window.console.log(error);
-        });
-    }
   },
   actions: {
     addFun(context) {

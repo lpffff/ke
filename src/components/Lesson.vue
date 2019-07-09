@@ -1,16 +1,19 @@
 <template>
-  <router-link to="/detail" class="lesson" :course-id="item.course_id">
+  <router-link :to="{path: '/show-detail-' + item.course_id}" class="lesson" :course-id="item.course_id">
     <div class="lesson-one">
       <img :src="item.knowledge_pic" :title="item.knowledge_name" />
       <div class="hover-view">
-        <span>测试</span>
+        <span>{{item.knowledge_desc}}</span>
       </div>
     </div>
     <div class="lesson-two">
       <div class="part">
         <div class="lesson-title" title="测试系列课录播课">{{item.knowledge_name}}</div>
         <div class="lesson-p1">
-          <span>{{`${new Date()}`}}</span> | <span class="green">1</span>课时
+          <template v-if="item.knowledge_period != ''">
+            <span>{{item.knowledge_period}}</span> |
+          </template>
+          <span class="green">1</span>课时
         </div>
       </div>
       <div class="part">
@@ -32,9 +35,7 @@ export default {
   props: {
     item: Object
   },
-  methods: {
-
-  }
+  methods: {}
 };
 </script>
 
