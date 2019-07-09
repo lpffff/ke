@@ -30,17 +30,16 @@ export default {
   data() {
     return {
       data: {
-        test: 1,
+        lessonData: [],
         filterData: this.$store.state.filterData,
-        filterCondition: this.$store.getters.searchFilterCondition,
-        lessonData: []
+        filterCondition: {}
       }
     };
   },
   methods: {
-    updateLessonData() {
-      window.console.log(this);
+    setListData: function() {
       const _filterCondition = this.data.filterCondition;
+      window.console.log(_filterCondition);
       let url = `/api.php?act=opencourse&method=lists_by_knowledge&count=${_filterCondition.count}&channel_id=${_filterCondition.channel_id}&limit=${_filterCondition.limit}`;
       if (_filterCondition.cat != "") {
         url += `&cat=${_filterCondition.cat}`;
@@ -54,48 +53,66 @@ export default {
       if (_filterCondition.live_type != "") {
         this.url += `&cat=${_filterCondition.live_type}`;
       }
-      window.console.log("url");
       window.console.log(url);
-      axios
-        .post(url)
-        .then(response => {
-          this.data.lessonData = response.data.data;
-          window.console.log(this.data);
-        })
-        // .then(function(response) {
-        //   window.console.log(this.data);
-        //   this.data.lessonData = response.data.data;
-        // })
-        .catch(error => {
-          window.console.log(error);
-        });
+      // axios
+      //   .post(url)
+      //   .then(response => {
+      //     // window.console.log(this.data);
+      //     this.data.lessonData = response.data.data;
+      //   })
+      //   // .then(function(response) {
+      //   //   window.console.log(this.data);
+      //   //   this.data.lessonData = response.data.data;
+      //   // })
+      //   .catch(error => {
+      //     window.console.log(error);
+      //   });
+    }
+  },
+  beforeMount: function() {
+    console.log("beforeMount");
+    window.console.log(this.$store);
+    let _filterData = Object.assign({}, this.$store.state.filterData);
+    console.log(_filterData);
+    this.data.filterCondition = {
+      cat: _filterData["cat"].data_active,
+      tag_id: _filterData["tag_id"].data_active,
+      limit: 0,
+      count: 10,
+      knowledge_type: this.knowledge_type,
+      channel_id: 1
+    };
+    this.setListData();
+    window.console.log(this.data);
+  },
+  computed: {
+    filterData() {
+      return this.data.filterData;
     }
   },
   watch: {
+    // data: {
+    //   handler(newValue, oldValue) {
+    //     console.log("变了");
+    //     console.log(newValue);
+    //   },
+    //   deep: true
+    // },
     filterData: {
-      handler(val, oldVal) {
-        window.console.log("1");
+      handler(newValue, oldValue) {
+        console.log("变了");
+        console.log(newValue);
+        this.setListData();
       },
       deep: true
     }
   },
-  created: function() {
-    this.updateLessonData();
-    window.console.log("created");
-    this.data.test = "created";
-  },
-  beforeMount: function() {
-    this.data.test = "beforeMount";
-  },
   mounted: function() {
-    window.console.log("mounted");
-    window.console.log(this.data);
+    console.log("mounted");
+    const _this = this;
   },
-  beforeUpdate: function() {
-    this.data.test = "beforeUpdate";
-  },
-  updated: function() {
-    this.data.test = "updated";
+  beforeUpdate() {
+    console.log(this.filterData);
   }
 };
 </script>
