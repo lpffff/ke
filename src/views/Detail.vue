@@ -28,7 +28,9 @@
           <div id="new_knowledge_list" class="knowledge_list">
             <div class="chapter_list">
               <ul id="chapter_listli">
-                <li v-for="(item, index) in data.knowledgeList" :key="index"></li>
+                <li v-for="(item, index) in data.knowledgeList" :key="index" :course-id="item.course_id">
+{{item.course_name}}
+                </li>
               </ul>
             </div>
           </div>
@@ -69,11 +71,6 @@ export default {
     };
   },
   computed: {
-    knowledgeList: function() {
-      let knowledgeList = {};
-      knowledgeList = wxDetail;
-      return {};
-    }
   },
   methods: {
     book: function() {
@@ -94,6 +91,7 @@ export default {
         "/api.php?act=opencourse&method=detail&course_id=" + _this.data.courseId
       )
       .then(function(response) {
+        console.log('detail');
         console.log(response);
         //单课详情
         _this.data.lessonDetail = response.data.data;
@@ -103,6 +101,7 @@ export default {
               response.data.data.knowledge_id
           )
           .then(function(response) {
+            console.log('wx_detail');
             console.log(response);
             //系列课详情
             _this.data.wxDetail = response.data.data;
@@ -112,7 +111,9 @@ export default {
                   response.data.data.knowledge_id
               )
               .then(function(response) {
+                console.log('lists');
                 console.log(response);
+                _this.data.knowledgeList = response.data.data;
               });
           })
           .catch(function(error) {
@@ -122,8 +123,12 @@ export default {
       .catch(function(error) {
         console.log(error);
       });
+  },
+  beforeMount: function (){
+    console.log(this);
   }
 };
+
 </script>
 
 <style>
