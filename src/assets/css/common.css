@@ -113,3 +113,5 @@ a:hover {
     width: 1200px;
     margin: 0 auto;
 }
+.left {float: left;}
+.right {float: right;}
