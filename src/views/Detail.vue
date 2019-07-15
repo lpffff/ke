@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Breadcrumb :title="data.title" />
+    <!-- <Breadcrumb :title="data.title" /> -->
     <LessonInfo v-if="!this.data.isBook" :book="book" :data="data" />
     <LessonVideo v-if="this.data.isBook" />
     <div class="gkkzb-row">
@@ -14,7 +14,7 @@
           >{{item}}</li>
         </ul>
       </div>
-      <div class="gkkzb-nav-left fix" v-show="showNavFix">
+      <div class="gkkzb-nav-left fix" v-show="data.showNavFix">
         <ul>
           <li
             v-for="(item, index) in data.navLeftData.text"
@@ -30,21 +30,16 @@
             <div class="tab-title">{{data.navLeftData.text[0]}}</div>
             <div v-html="data.knowledge_content"></div>
           </div>
-          <div class="gkkzb-cent-tab" style="padding-bottom: 1000px;">
+          <div class="gkkzb-cent-tab" style="padding-bottom: 2000px;">
             <div class="tab-title">{{data.navLeftData.text[1]}}</div>
             <div id="new_knowledge_list" class="knowledge_list">
-              <div class="chapter_list">
-                <ul id="chapter_listli">
-                  <li
-                    v-for="(item, index) in data.knowledgeList"
-                    :key="index"
-                    :course-id="item.course_id"
-                  >{{item.course_name}}</li>
-                </ul>
-              </div>
+              <ChapterList :chapterData="data.knowledgeList" />
             </div>
           </div>
-          <div class="gkkzb-cent-tab"></div>
+          <div id class="comment_content_live gkkzb-cent-tab">
+            <div class="tab-title">课程评价</div>
+            <CommentList :courseId="data.courseId" />
+          </div>
         </div>
         <div class="gkkzb-cent-right"></div>
       </div>
@@ -54,9 +49,12 @@
 
 <script>
 import axios from "axios";
-import Breadcrumb from "../components/Common/Breadcrumb.vue";
+// import Breadcrumb from "../components/Common/Breadcrumb.vue";
 import LessonInfo from "../components/Detail/LessonInfo";
 import LessonVideo from "../components/Detail/LessonVideo";
+import ChapterList from "../components/Detail/ChapterList";
+import CommentList from "../components/Detail/CommentList";
+
 import {
   htmlspecialchars_decode,
   scrollToTop,
@@ -65,9 +63,11 @@ import {
 export default {
   name: "Detail",
   components: {
-    Breadcrumb,
+    // Breadcrumb,
     LessonInfo,
-    LessonVideo
+    LessonVideo,
+    ChapterList,
+    CommentList
   },
   data() {
     return {
@@ -86,9 +86,9 @@ export default {
         knowledge_content: "",
         timer: null,
         isChangeWhileScroll: true,
-        winY: Number,
         centLeftTop: [],
-        navLeftTop: Number
+        navLeftTop: 0,
+        showNavFix: false
       }
     };
   },
@@ -97,13 +97,6 @@ export default {
       let course_content = this.data.lessonDetail.course_content;
       course_content = htmlspecialchars_decode(course_content);
       return course_content;
-    },
-    showNavFix() {      
-      if (this.data.winY > this.data.navLeftTop) {
-        return true;
-      } else {
-        return false;
-      }
     }
   },
   // watch: function(){
@@ -113,45 +106,67 @@ export default {
     book: function() {
       this.data.isBook = true;
     },
-    getNavLeftTop: function(){
+    getNavLeftTop: function() {
       const navLeft = document.querySelector(".gkkzb-nav-left");
       const navLeftTop = navLeft.offsetTop;
-      return this.data.navLeftTop = navLeftTop;
+      return (this.data.navLeftTop = navLeftTop);
     },
     handleNavLeft: function() {
-        this.data.isChangeWhileScroll = false;
-        const navLeftLi = document.querySelectorAll(".gkkzb-nav-left li");
-        const index = Array.prototype.indexOf.call(navLeftLi, event.target);
-        this.data.navLeftData.active = index;
-        const goTop = this.data.centLeftTop[index];
-        scrollToTop(window, goTop, 400);
-        // window.scrollTo(0, this.winScrollTop);
-        setTimeout(() => {
-          this.data.isChangeWhileScroll = true;
-        }, 400);
+      this.data.isChangeWhileScroll = false;
+      window.addEventListener(
+        "scroll",
+        function(event) {
+          var e = event || window.event;
+          e.preventDefault();
+          e.returnValue = false;
+          return false;
+        },
+        false
+      );
+      const navLeftLi = document.querySelectorAll(".gkkzb-nav-left li");
+      const index = Array.prototype.indexOf.call(navLeftLi, event.target) % 3;
+      this.data.navLeftData.active = index;
+      const goTop = this.data.centLeftTop[index] - 57;
+      scrollToTop(window, goTop, 400);
+      setTimeout(() => {
+        this.data.isChangeWhileScroll = true;
+        window.addEventListener(
+          "scroll",
+          function(event) {
+            var e = event || window.event;
+            e.returnValue = true;
+          },
+          false
+        );
+      }, 2000);
     },
     whileWinScroll: function() {
-      this.data.winY = window.scrollY;
-      console.log(this.data.winY);
+      const winY = window.scrollY;
+      // this.data.winY = window.scrollY;
       const _this = this,
         change = this.data.isChangeWhileScroll,
         arrTop = this.data.centLeftTop;
+      if (winY > this.data.navLeftTop && this.data.showNavFix == false) {
+        this.data.showNavFix = true;
+      } else if (winY < this.data.navLeftTop && this.data.showNavFix == true) {
+        this.data.showNavFix = false;
+      }
       if (change) {
         let winY = window.scrollY;
         for (let i = 0; i <= arrTop.length - 1; i++) {
           (function(i) {
-            if (arrTop[i + 1]) {
-              if (winY > arrTop[i] && winY < arrTop[i + 1]) {
+            if (arrTop[i + 1] != undefined) {
+              if (winY >= arrTop[i] && winY < arrTop[i + 1]) {
                 _this.data.navLeftData.active = i;
                 return;
+              } else if (winY > arrTop[i + 1]) {
+                _this.data.navLeftData.active = i;
               }
-            } else if (winY > arrTop[i]) {
-              _this.data.navLeftData.active = i;
             }
           })(i);
         }
       } else {
-        return false;
+        return;
       }
     },
     getcentLeftTop: function() {
@@ -163,7 +178,8 @@ export default {
       this.data.centLeftTop = centLeftTop;
     },
     getNavLeftActive() {
-      const winY = this.data.winY,
+      const // winY = this.data.winY,
+        winY = window.scrollY,
         arrTop = this.data.centLeftTop;
       let navLeftActive = 0;
       for (let i = 0; i <= arrTop.length - 1; i++) {
@@ -241,4 +257,9 @@ export default {
 
 <style>
 @import url("../assets/css/open-course-live.css");
+/* 目录 */
+#new_knowledge_list {
+  position: relative;
+  width: 100%;
+}
 </style>

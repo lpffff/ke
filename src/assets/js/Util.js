@@ -101,50 +101,69 @@ function htmlspecialchars_decode(str) {
 // to：滚动到哪个位置
 // duration: 动画时长
 // window
-function scrollToTop(element, to, duration) {
+function scrollToTop(element, to, duration, callback) {
+  
   if (duration <= 0) return;
   const diff = to - element.scrollY;
   let winScrollTop = element.scrollY;
   let total = 0;
-  const perTick = (diff / duration) * 10;
+  let perTick = diff/duration * 10;
   scroll(perTick);
   function scroll(perTick) {
+    let scrollToTopTimer = null;
+    let isFast = Boolean;
+    if (Math.abs(total) > Math.abs(diff) - 40) {
+      isFast = false;
+    } else {
+      isFast = true;
+    }
+
+    if (!isFast) {
+      perTick = diff / duration;
+    }
     winScrollTop += perTick;
     total += perTick;
     element.scrollTo(0, winScrollTop);
-    if (total >= diff) {
-      clearTimeout(timer);
+    if (Math.abs(total) >= Math.abs(diff) - 100) {
+      clearTimeout(scrollToTopTimer);
+      element.scrollTo(0, to);
+      if(callback){
+        callback();
+      }
       return;
-    } 
-    let timer = setTimeout(function(){scroll(perTick)}, 3);
+    } else {      
+      scrollToTopTimer = setTimeout(function() {
+        scroll(perTick);
+      },4);
+    }
   }
 }
 // 防抖
-function debounce(fn, wait) {    
-  var timeout = null;    
-  return function() {        
-      if(timeout !== null)   clearTimeout(timeout);        
-      timeout = setTimeout(fn, wait);    
-  }
+function debounce(fn, wait) {
+  var timeout = null;
+  return function() {
+    if (timeout !== null) clearTimeout(timeout);
+    timeout = setTimeout(fn, wait);
+  };
 }
 // 节流throttle代码（时间戳+定时器）：
-var throttle = function (func, delay) {
-  var timer = null;     
-  var startTime = Date.now();     
-  return function() {             
-      var curTime = Date.now();             
-      var remaining = delay - (curTime - startTime);             
-      var context = this;             
-      var args = arguments;             
-      clearTimeout(timer); 
-      if (remaining <= 0) {                    
-          func.apply(context, args);                    
-          startTime = Date.now();              
-      } else {                    
-          timer = setTimeout(func, remaining);              
-      }      
-  }
-}
+var throttle = function(func, delay) {
+  var throttleTimer = null;
+  var startTime = Date.now();
+  return function() {
+    var curTime = Date.now();
+    var remaining = delay - (curTime - startTime);
+    var context = this;
+    var args = arguments;
+    clearTimeout(throttleTimer);
+    if (remaining <= 0) {
+      func.apply(context, args);
+      startTime = Date.now();
+    } else {
+      throttleTimer = setTimeout(func, remaining);
+    }
+  };
+};
 export {
   debounce,
   throttle,
@@ -157,6 +176,5 @@ export {
   getDate,
   htmlspecialchars,
   htmlspecialchars_decode,
-  scrollToTop,
-  
+  scrollToTop
 };

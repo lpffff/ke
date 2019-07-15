@@ -1,7 +1,7 @@
 <template>
   <div class="gkkzb-detail-total">
     <div class="container">
-      <Breadcrumb title="标题" />
+      <Breadcrumb :title="wxDetail.knowledge_name" />
       <div class="gkkzb-cent clearboth">
         <div class="total-left">
           <img class="gkkzb-detail-logo" :src="wxDetail.knowledge_pic" />
