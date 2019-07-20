@@ -1,8 +1,13 @@
 <template>
   <div>
     <!-- <Breadcrumb :title="data.title" /> -->
-    <LessonInfo v-if="!this.data.isBook" :book="book" :data="data" />
-    <LessonVideo v-if="this.data.isBook" />
+    <LessonInfo
+      v-if="[0,1,2,3].includes(viewType)"
+      :book="book"
+      :lessonData="data"
+      :viewType="viewType"
+    />
+    <LessonVideo v-if="[4,5].includes(viewType)" :lessonData="data" :viewType="viewType" />
     <div class="gkkzb-row">
       <div class="gkkzb-nav-left">
         <ul>
@@ -30,7 +35,7 @@
             <div class="tab-title">{{data.navLeftData.text[0]}}</div>
             <div v-html="data.knowledge_content"></div>
           </div>
-          <div class="gkkzb-cent-tab" style="padding-bottom: 2000px;">
+          <div class="gkkzb-cent-tab" style="padding-bottom: 400px;">
             <div class="tab-title">{{data.navLeftData.text[1]}}</div>
             <div id="new_knowledge_list" class="knowledge_list">
               <ChapterList :chapterData="data.knowledgeList" />
@@ -41,7 +46,9 @@
             <CommentList :courseId="data.courseId" />
           </div>
         </div>
-        <div class="gkkzb-cent-right"></div>
+        <div class="gkkzb-cent-right">
+          <Teacher :teacherData="this.data.lessonDetail" />
+        </div>
       </div>
     </div>
   </div>
@@ -50,10 +57,11 @@
 <script>
 import axios from "axios";
 // import Breadcrumb from "../components/Common/Breadcrumb.vue";
-import LessonInfo from "../components/Detail/LessonInfo";
-import LessonVideo from "../components/Detail/LessonVideo";
-import ChapterList from "../components/Detail/ChapterList";
-import CommentList from "../components/Detail/CommentList";
+import LessonInfo from "./Detail/LessonInfo";
+import LessonVideo from "./Detail/LessonVideo";
+import ChapterList from "./Detail/ChapterList";
+import CommentList from "./Detail/CommentList";
+import Teacher from "./Detail/Teacher";
 
 import {
   htmlspecialchars_decode,
@@ -67,7 +75,8 @@ export default {
     LessonInfo,
     LessonVideo,
     ChapterList,
-    CommentList
+    CommentList,
+    Teacher
   },
   data() {
     return {
@@ -76,7 +85,6 @@ export default {
         lessonDetail: {},
         wxDetail: {},
         title: "详情页标题啊",
-        isBook: false,
         navLeftData: {
           text: ["课程详情", "课程目录", "课程评价"],
           active: 0,
@@ -93,18 +101,74 @@ export default {
     };
   },
   computed: {
+    viewType() {
+      /**
+       * 按条件展示课程信息
+       * *课程信息
+       * 0    未登录
+       * 1    未预约      
+       * 2    未开始      is_live2 live_type1
+       * 3    直博间      is_live1 live_type1
+       * 4    伪直播  
+       * 5    回放生成中  is_live3 live_type1
+       * *课程视频
+       * 6    欢拓回放    is_live3 live_type2
+       * 7    录播回放    is_live3 live_type3
+       *     
+       */
+      let viewType = 0;
+      if (!this.$store.state.isLogin) {
+        viewType = 0;
+        return
+      } else if(!this.isBook) {
+        viewType = 1;
+        return
+      } else if(this.data.lessonDetail.is_live == 2){
+        viewType = 2;
+        return
+      } else if(this.data.lessonDetail.is_live == 1 && this.data.wxDetail.live_type == 1){
+        viewType = 3;
+        return
+      } else if(viewType == 100){
+        viewType = 4;//伪直播条件
+        return
+      } else if(this.data.lessonDetail.is_live == 3 && this.data.wxDetail.live_type == 1){
+        viewType = 5;
+        return
+      } else if(this.data.wxDetail.live_type == 2){
+        viewType = 6;
+        return
+      } else if(this.data.wxDetail.live_type == 3){
+        viewType = 7;
+        return
+      }
+      console.log(viewType);
+      return viewType;
+      
+    },
     course_content() {
       let course_content = this.data.lessonDetail.course_content;
       course_content = htmlspecialchars_decode(course_content);
       return course_content;
+    },
+    isBook() {
+      const wx_booklistIds = this.$store.state.wx_booklistIds;
+      let isBook = false;
+
+      if (wx_booklistIds.indexOf(this.data.wxDetail.knowledge_id) != -1) {
+        isBook = true;
+      }
+      return isBook;
     }
   },
   // watch: function(){
 
   // },
+
   methods: {
     book: function() {
-      this.data.isBook = true;
+      const knowledge_id = this.data.wxDetail.knowledge_id;
+      this.$store.dispatch("bookFun", { knowledge_id: knowledge_id });
     },
     getNavLeftTop: function() {
       const navLeft = document.querySelector(".gkkzb-nav-left");
@@ -198,26 +262,27 @@ export default {
     }
   },
   created: function() {
+    console.log(this);
     const _this = this;
     axios
       .post(
         "/api.php?act=opencourse&method=detail&course_id=" + _this.data.courseId
       )
-      .then(function(response) {
-        // console.log('detail');
-        // console.log(response);
+      .then(function(res) {
+        console.log("detail");
+        console.log(res);
+        _this.data.lessonDetail = res.data.data;
         //单课详情
-        _this.data.lessonDetail = response.data.data;
         axios
           .post(
             "/api.php?act=opencourse_knowledge&method=wx_detail&knowledge_id=" +
-              response.data.data.knowledge_id
+              res.data.data.knowledge_id
           )
-          .then(function(response) {
-            // console.log('wx_detail');
-            // console.log(response);
+          .then(function(res) {
+            console.log("wx_detail");
+            console.log(res);
             //系列课详情
-            _this.data.wxDetail = response.data.data;
+            _this.data.wxDetail = res.data.data;
 
             let knowledge_content = _this.data.wxDetail.knowledge_content;
             knowledge_content = htmlspecialchars_decode(knowledge_content);
@@ -225,12 +290,12 @@ export default {
             axios
               .post(
                 "/api.php?act=opencourse&method=lists&knowledge_id=" +
-                  response.data.data.knowledge_id
+                  res.data.data.knowledge_id
               )
-              .then(function(response) {
+              .then(function(res) {
                 // console.log('lists');
-                // console.log(response);
-                _this.data.knowledgeList = response.data.data;
+                // console.log(res);
+                _this.data.knowledgeList = res.data.data;
                 _this.getcentLeftTop();
                 _this.getNavLeftTop();
               });
@@ -241,6 +306,8 @@ export default {
       })
       .catch(function(error) {
         console.log(error);
+        alert("该课程已下架");
+        // history.go(-1);
       });
   },
   beforeMount: function() {},

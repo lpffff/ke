@@ -1,5 +1,5 @@
 <template>
-  <router-link :to="{path: '/show-detail-' + item.course_id}" class="lesson" :course-id="item.course_id">
+  <router-link :to="{path: '/course-show-' + item.course_id}" class="lesson" :course-id="item.course_id">
     <div class="lesson-one">
       <img :src="item.knowledge_pic" :title="item.knowledge_name" />
       <div class="hover-view">

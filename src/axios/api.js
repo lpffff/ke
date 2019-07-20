@@ -10,8 +10,8 @@ axios.interceptors.request.use(function(config) {
     return Promise.reject(error);
   })
   // 响应拦截器
-axios.interceptors.response.use(function(response) {
-  return response;
+axios.interceptors.res.use(function(res) {
+  return res;
 }, function(error) {
   return Promise.reject(error);
 })
@@ -20,8 +20,8 @@ axios.interceptors.response.use(function(response) {
 export function fetch(url, params) {
   return new Promise((resolve, reject) => {
     axios.post(url, params)
-      .then(response => {
-        resolve(response.data);
+      .then(res => {
+        resolve(res.data);
       })
       .catch((error) => {
         reject(error);

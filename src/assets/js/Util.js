@@ -102,12 +102,11 @@ function htmlspecialchars_decode(str) {
 // duration: 动画时长
 // window
 function scrollToTop(element, to, duration, callback) {
-  
   if (duration <= 0) return;
   const diff = to - element.scrollY;
   let winScrollTop = element.scrollY;
   let total = 0;
-  let perTick = diff/duration * 10;
+  let perTick = (diff / duration) * 10;
   scroll(perTick);
   function scroll(perTick) {
     let scrollToTopTimer = null;
@@ -127,14 +126,14 @@ function scrollToTop(element, to, duration, callback) {
     if (Math.abs(total) >= Math.abs(diff) - 100) {
       clearTimeout(scrollToTopTimer);
       element.scrollTo(0, to);
-      if(callback){
+      if (callback) {
         callback();
       }
       return;
-    } else {      
+    } else {
       scrollToTopTimer = setTimeout(function() {
         scroll(perTick);
-      },4);
+      }, 4);
     }
   }
 }

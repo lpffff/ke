@@ -38,7 +38,7 @@
 .lesson.lesson-on .tag {
     padding-left: 22px;
     color: #fff;
-    background: url("../img/icon-ongoing.png") #fc3f4c no-repeat center left 6px;
+    background: url("<%= BASE_URL %>img/icon-ongoing.png") #fc3f4c no-repeat center left 6px;
 }
 
 .lesson.lesson-will .tag {
@@ -166,7 +166,7 @@
     display: inline-block;
     width: 20px;
     height: 16px;
-    background: url("../img/time2.png") no-repeat center left;
+    background: url("<%= BASE_URL %>img/time2.png") no-repeat center left;
     vertical-align: bottom;
 }
 
@@ -174,7 +174,7 @@
     display: inline-block;
     width: 20px;
     height: 16px;
-    background: url("../img/icon-view.png") no-repeat center left;
+    background: url("<%= BASE_URL %>img/icon-view.png") no-repeat center left;
     vertical-align: bottom;
 }
 

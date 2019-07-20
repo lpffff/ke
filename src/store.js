@@ -6,9 +6,20 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    isLogin: true,
+    user: {
+      // status: 0,
+      // code: 0,
+      // data: {
+      //   nickname: "136****4685",
+      //   account: "136****4685",
+      //   pic: "",
+      //   type: "2",
+      //   user_id: "233292"
+      // }
+    },
     count: 1,
-    filterData: JSON.parse(localStorage.getItem("filterData"))
-      || {
+    filterData: JSON.parse(localStorage.getItem("filterData")) || {
       cat: {
         type: "cat",
         id: "catWrap",
@@ -67,9 +78,20 @@ export default new Vuex.Store({
     },
     homeFilterLessonData: [],
     searchFilterLessonData: [],
-    recommendLessonData: []
+    recommendLessonData: [],
+    wx_booklist: [],
+    wx_booklistIds: []
   },
   getters: {
+    isLogin: function (state) {
+      let isLogin = false;
+      if (state.user.status == 0) {
+        isLogin = true
+      } else {
+        isLogin = false;
+      }
+      return isLogin;
+    },
     searchFilterCondition: function(state) {
       return {
         cat: state.filterData["cat"].data_active,
@@ -82,7 +104,7 @@ export default new Vuex.Store({
       };
     },
     homeFilterCondition: function(state) {
-      state.homeFilterCondition = {
+      let homeFilterCondition = {
         cat: state.filterData["cat"].data_active,
         tag_id: state.filterData["tag_id"].data_active,
         limit: 0,
@@ -90,7 +112,8 @@ export default new Vuex.Store({
         knowledge_type: state.knowledge_type,
         channel_id: 1
       };
-    },
+      return homeFilterCondition;
+    }
   },
   mutations: {
     add(state) {
@@ -104,6 +127,41 @@ export default new Vuex.Store({
       state.filterData[type].data_active = param[type];
       localStorage.setItem("filterData", JSON.stringify(state.filterData));
     },
+    setUserInfo(state, param) {
+      state.user = param;
+    },
+    getBooklist(state) {
+      axios
+        .post("/api.php?act=opencourse&method=wx_booklist")
+        .then(function(res) {
+          // console.log(res);
+          state.wx_booklist = res.data.data;
+          state.wx_booklist.map(function(item) {
+            state.wx_booklistIds.push(item.knowledge_id);
+          });
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    },
+    book(state, params) {
+      axios
+        .post(
+          "/api.php?act=opencourse_knowledge&method=book&knowledge_id=" +
+            params.knowledge_id
+        )
+        .then(function(res) {
+          console.log(res);
+          if (res.data.status == 0) {
+            state.wx_booklistIds.push(params.knowledge_id);
+          } else {
+            window.location.href = "//www.sh.com/login.php";
+          }
+        })
+        .catch(function(err) {
+          console.log(err);
+        });
+    }
   },
   actions: {
     addFun(context) {
@@ -115,11 +173,20 @@ export default new Vuex.Store({
     handleFilterFun(context, param) {
       context.commit("handleFilter", param);
     },
-    homeFilterLessonDataFun(context,param){
+    homeFilterLessonDataFun(context, param) {
       context.commit("homeFilterLessonData", param);
     },
-    searchFilterLessonDataFun(context){
+    searchFilterLessonDataFun(context) {
       context.commit("searchFilterLessonData");
+    },
+    setUserInfoFun(context, param) {
+      context.commit("setUserInfo", param);
+    },
+    getBooklistFun(context) {
+      context.commit("getBooklist");
+    },
+    bookFun(context, params) {
+      context.commit("book", params);
     }
   }
 });

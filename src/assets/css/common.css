@@ -21,97 +21,116 @@ p,
 dl,
 dt,
 dd {
-    margin: 0;
-    padding: 0;
-    font-family: Microsoft YaHei, Helvetica, tahoma, arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: Microsoft YaHei, Helvetica, tahoma, arial, sans-serif;
 }
 
 * {
-    outline: none
+  outline: none;
 }
 
 img {
-    border: none
+  border: none;
 }
 
 li {
-    list-style: none
+  list-style: none;
 }
 
 body {
-    font-size: 14px;
-    color: #333;
-    background: #fff
+  font-size: 14px;
+  color: #333;
+  background: #fff;
 }
 
 a {
-    color: #333;
-    text-decoration: none
+  color: #333;
+  text-decoration: none;
 }
 
 a:hover {
-    color: #ff7800
+  color: #ff7800;
 }
 
 .green {
-    color: #1ec800
+  color: #1ec800;
 }
 
 .yellow {
-    color: #ff7800
+  color: #ff7800;
 }
 
 .red {
-    color: red
+  color: red;
 }
 
 .clearboth {
-    *zoom: 1;
+  *zoom: 1;
 }
 
 .clearboth:after {
-    display: block;
-    content: "clear";
-    height: 0;
-    clear: both;
-    overflow: hidden;
-    visibility: hidden;
+  display: block;
+  content: "clear";
+  height: 0;
+  clear: both;
+  overflow: hidden;
+  visibility: hidden;
 }
 
 .clear {
-    clear: both;
-    height: 0;
+  clear: both;
+  height: 0;
 }
 
 .clearfix {
-    *zoom: 1
+  *zoom: 1;
 }
 
 .clearfix:before,
 .clearfix:after {
-    display: table;
-    line-height: 0;
-    content: "";
+  display: table;
+  line-height: 0;
+  content: "";
 }
 
 .clearfix:after {
-    clear: both;
+  clear: both;
 }
 
 .fl {
-    float: left;
+  float: left;
 }
 
 .fr {
-    float: right;
+  float: right;
 }
-
 
 /* 容器 */
 
 .container {
-    width: 1200px;
-    margin: 0 auto;
+  width: 1200px;
+  margin: 0 auto;
 }
-.left {float: left;}
-.right {float: right;}
+.left {
+  float: left;
+}
+.right {
+  float: right;
+}
+input::-webkit-input-placeholder,
+textarea::-webkit-input-placeholder {
+  color: #999;
+}
+input:-moz-placeholder,
+textarea:-moz-placeholder {
+  color: #999;
+}
+input::-moz-placeholder,
+textarea::-moz-placeholder {
+  color: #999;
+}
+input:-ms-input-placeholder,
+textarea:-ms-input-placeholder {
+  color: #999;
+}

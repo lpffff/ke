@@ -1,17 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico" />
     <title>ke</title>
+    <script></script>
   </head>
   <body>
     <noscript>
-      <strong>We're sorry but ke doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+      <strong
+        >We're sorry but ke doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong
+      >
     </noscript>
-    <div id="app"></div>
+
+    <script src="http://www.sh.com/static/js/jquery.2.1.4.min.js"></script>
+    <script src="http://s.sh.com/js/common/head.js"></script>
+    <script src="http://www.sh.com/html.php?act=top&jsoncallback=topBuilder"></script>
+    <script src="http://www.sh.com/html.php?act=nav&jsoncallback=navBuilder"></script>
+    <script>
+      window.topBuilder = function(d) {
+        document.write(d.top);
+      };
+      window.navBuilder = function(d) {
+        document.write(d.nav);
+      };
+    </script>
+    <script>
+      window.HELP_IMPROVE_VIDEOJS = false;
+    </script>
     <!-- built files will be auto injected -->
+    <div id="app"></div>
+
+    <script src="http://s.sh.com/js/common/footer.js"></script>
   </body>
 </html>

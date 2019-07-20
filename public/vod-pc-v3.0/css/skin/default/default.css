@@ -1,0 +1,166 @@
+html {
+    -webkit-text-size-adjust: none
+}
+
+html ::-webkit-scrollbar {
+    width: 7px
+}
+
+html ::-moz-scrollbar {
+    width: 7px
+}
+
+html ::-webkit-scrollbar-track {
+    background-color: #efefef;
+    color: #28445c
+}
+
+html ::-moz-scrollbar-track {
+    background-color: #efefef;
+    color: #28445c
+}
+
+html ::-webkit-scrollbar-thumb {
+}
+
+html ::-moz-scrollbar-thumb {
+    background-color: #2dc6ff
+}
+
+.headbg {
+    background-color: #00bbfe
+}
+
+.camerabg {
+    background: #000
+}
+
+.camerabg.playing {
+    background: #000
+}
+
+.carousel.left .ln_arrow:hover {
+    background-color: #76daff
+}
+
+.carousel.left .lnx_arrow:hover {
+    background-color: #76daff
+}
+
+.carousel.right .rn_arrow:hover {
+    background-color: #76daff
+}
+
+.carousel.right .rnx_arrow:hover {
+    background-color: #76daff
+}
+
+.chapter_list ul li:hover {
+    background: #edfafd
+}
+
+.chapter_list ul li .aclick_bg .chapter .circle {
+    color: #fefefe
+}
+
+.chapter_list ul li .aclick_bg .chapter .title {
+    color: #fefefe
+}
+
+.chapter_list ul li .aclick_bg .chapter .chapter_time {
+    color: #fff
+}
+
+.chapter_list ul li .chapter .circle {
+    color: #999
+}
+
+.chapter_list ul li .chapter .p_state {
+    background: url("img/qd3ODGuq.gif") no-repeat
+}
+
+.album_list ul li:hover {
+    background: #edfafd
+}
+
+.album_list ul li dd .circle {
+    color: #00bbfe
+}
+
+.album_list ul li dd i {
+    background: url("img/qd3ODGuq.gif") no-repeat
+}
+
+.mask_background {
+    background: #caf0ff
+}
+
+.live_info .lv_state {
+    background: url("img/gather_icon.png") no-repeat
+}
+
+.footer_left i {
+    background: url("img/gather_icon.png") no-repeat
+}
+
+.footer_right i {
+    background: url("img/gather_icon.png") no-repeat
+}
+
+.noUi-handle {
+    background: url("img/silder_icon.png") no-repeat
+}
+
+.noUi-horizontal .noUi-handle {
+    width: 18px;
+    height: 18px;
+    bottom: 5px
+}
+
+.live_uinfo .quit {
+    background: url("img/gather_icon.png") no-repeat
+}
+
+.noUi-background {
+    background: #00bbfe
+}
+
+#void_range .ui-slider-handle {
+    border: 0;
+    background: url("img/voice_icon.png") no-repeat
+}
+
+.ui-slider-range {
+    background: #00bbfe
+}
+
+.ui-widget-header {
+    background: #00bbfe
+}
+
+.enter_arrow {
+    background: url("img/gather_icon.png") no-repeat
+}
+
+.la-line-scale-party > div {
+    color: #00bbfe;
+    background: #00bbfe;
+    border-color: #00bbfe
+}
+
+.load_state span {
+    color: #00bbfe
+}
+
+.clearboth {
+    *zoom: 1;
+}
+
+.clearboth:after {
+    display: block;
+    content: "clear";
+    height: 0;
+    clear: both;
+    overflow: hidden;
+    visibility: hidden;
+}

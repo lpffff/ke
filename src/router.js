@@ -21,7 +21,7 @@ export default new Router({
         import(/* webpackChunkName: "about" */ "./views/Search.vue")
     },
     {
-      path: `/show-detail-:courseId(\\d+)`,
+      path: `/course-show-:courseId(\\d+)`,
       name: "detail",
       component: () =>
         import("./views/Detail.vue")

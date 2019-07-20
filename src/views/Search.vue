@@ -23,8 +23,8 @@
 import axios from "axios";
 import MFilterLi from "../components/MFilterLi";
 import MFilterSearchBox from "../components/MFilterSearchBox";
-import SearchLessonList from "../components/Search/SearchLessonList";
-import RecommendList from "../components/Search/RecommendList";
+import SearchLessonList from "./Search/SearchLessonList";
+import RecommendList from "./Search/RecommendList";
 export default {
   name: "Search",
   components: {
@@ -95,18 +95,18 @@ export default {
   beforeCreate: function() {
     axios
       .post("/", {})
-      .then(response => {
-        // window.console.log(response);
-        this.data.lessonData = response.data.lesson_list.children;
+      .then(res => {
+        // window.console.log(res);
+        this.data.lessonData = res.data.lesson_list.children;
       })
       .catch(function(error) {
         window.console.log(error);
       });
     axios
       .post("/guess", {})
-      .then(response => {
-        // window.console.log(response);
-        this.data.guessData = response.data.lesson_list.children;
+      .then(res => {
+        // window.console.log(res);
+        this.data.guessData = res.data.lesson_list.children;
       })
       .catch(function(error) {
         window.console.log(error);
@@ -117,6 +117,7 @@ export default {
 
 <style scoped>
 /*搜索筛选*/
+.container{overflow: hidden;}
 .main-left {
   position: relative;
   float: left;
@@ -127,6 +128,16 @@ export default {
   position: relative;
   float: left;
   width: 204px;
+}
+.filter-lesson {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px 0;
+  text-align: center;
+  border: 1px solid #eee;
+  border-radius: 2px;
+  box-sizing: border-box;
 }
 .filter-list-wrap.list-wrap3 {
   padding-left: 0;

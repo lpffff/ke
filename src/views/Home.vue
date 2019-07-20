@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <img alt="Vue logo" src="../assets/img/logo.png" />
     <div class="filter-lesson">
       <ul class="list-wrap">
         <MFilterLi  :filterLiData="filterData.cat" />
@@ -14,7 +13,7 @@
 </template>
 
 <script>
-import HomeLessonList from "../components/Home/HomeLessonList.vue";
+import HomeLessonList from "./Home/HomeLessonList.vue";
 import MFilterLi from "../components/MFilterLi.vue";
 import MFilterSearchBox from "../components/MFilterSearchBox.vue";
 
@@ -50,6 +49,16 @@ h3 {
 
 a {
   color: #42b983;
+}
+.filter-lesson {
+  position: relative;
+  width: 100%;
+  margin: 0 auto;
+  padding: 10px 0;
+  text-align: center;
+  border: 1px solid #eee;
+  border-radius: 2px;
+  box-sizing: border-box;
 }
 .filter {
   position: relative;

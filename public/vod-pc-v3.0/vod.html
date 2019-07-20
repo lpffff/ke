@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="cn-zh">
+	<head>
+		<title>欢拓云点播 - v3.0</title>
+		<meta charset="utf-8" />
+		<meta name="renderer" content="webkit" />
+		<meta http-equiv="X-UA-Compatible" content="IE=Edge, chrome=1" />
+
+		<!-- loader 样式 -->
+		<style type="text/css">
+			.first_loader{
+				position: absolute;
+				width: 200px;
+				height: 100px;
+				top: 50%;
+				left: 50%;
+				margin: -50px 0 0 -100px;
+				border-radius: 1em;
+				font-family: "Hiragino Sans GB","\5FAE\8F6F\96C5\9ED1";
+				font-size: 12px;
+				color: #666;
+				text-align: center;
+			}
+			.hidden{display: none;}
+		</style>
+		
+		<script type="text/javascript">
+			// 通过API接口，获得一个access_token
+            access_token = window.parent.access_token;
+            opencourse = window.parent.opencourse;
+            HT =  window.parent.HT;
+
+			// 标志当前点播
+			window.__vod__ = true;
+		</script>
+	</head>
+	<body>
+		<!-- @page-loader -->
+		<div id="first_loader" class="first_loader">数据加载中 - v3.0</div>
+
+		<!-- @静态资源加载SDK -->
+		<script>
+		<!-- 
+		/* TalkFun-CDN-Loader v2.6  www.talk-fun.com */
+		!function(e){var t=null;t=window.TALKFUN_CDN_HOSTS&&"object"==typeof window.TALKFUN_CDN_HOSTS&&window.TALKFUN_CDN_HOSTS.length>0?window.TALKFUN_CDN_HOSTS:["static-2.talk-fun.com","static-1.talk-fun.com","static-3.talk-fun.com","static.talk-fun.com"];var n=(e.TALKFUN_SCRIPT_DEPENS||[],e.document.body),o=t[0],r=/(static\-[\d]|static)\.talk-fun\.com/g,a=window.location.href.indexOf("cdnlog=list")>-1,c=e.document.location.protocol,i=c+"//"+t[0]+"/t.js",u=15e3,l=null;Array.prototype.forEach||(Array.prototype.forEach=function(e){var t=this.length;if("function"!=typeof e)throw new TypeError;for(var n=arguments[1],o=0;t>o;o++)o in this&&e.call(n,this[o],o,this)});var s=function(e,t,n){var o=e.length;if("function"!=typeof n)throw new TypeError;for(var r=0;o>r;r++)e[r]===t&&n.call(e,e[r],r)},f=function(e){return Array.prototype.slice.call(e,0)};e.TF_getStaticHost=function(e){var t=r,n=e.match(t);return n?e.replace(t,o):e};var d=function(){if(!a)return!1;e.console&&console.log.apply(console,arguments)},m=function(e,t){d("Post Log ===> "+t),v({url:c+"//log.talk-fun.com/stats.html",method:"GET",data:{__type:"static",state:e||"",errorfile:t||""}})},p=function(){var e={xhr:null,name:null},t=navigator.userAgent.match(/MSIE\s(\d.*?);/i)||null;if(t&&t.length>0&&(t=parseInt(t[1],10)),window.XDomainRequest&&10>t)e.xhr=new XDomainRequest,e.name="XDomainRequest";else if(window.XMLHttpRequest)e.xhr=new XMLHttpRequest,e.name="XMLHttpRequest";else if(window.ActiveXObject)try{e.xhr=new ActiveXObject("MSXML2.XMLHTTP.3.0"),e.name="ActiveXObject"}catch(n){return null}return e},h=function(e){if(!e)return e={},!1;var t=["url","method","timeout","dataType","data","success","error"];return t.forEach(function(t){var n=e[t];switch(t){case"url":n="string"==typeof n?n:"",e[t]=n;break;case"method":n="string"==typeof n?n:"GET",e[t]=n;break;case"dataType":n="string"==typeof n?n:null,e[t]=n;break;case"timeout":n=parseInt(n,10)||0,e[t]=n;break;case"data":n="object"==typeof n?n:null;var o="";if(n){var r=[],a="";for(var c in n)a=c+"="+n[c],r.push(a);o=encodeURI(r.join("&"))}if(e.url&&"get"===e.method.toLowerCase()){var i="?";e.url.indexOf("?")>-1&&(i="&"),e.url=e.url+i+o}e[t]=o;break;case"success":n="function"==typeof n?n:function(){},e[t]=n;break;case"error":n="function"==typeof n?n:function(){},e[t]=n}}),e},v=function(e){e=h(e);var t=p(),n=t.xhr,o=t.name;e.dataType&&(n.responeType=e.dataType),n.open(e.method,e.url,!0),n.timeout=e.timeout,"post"===e.method.toLowerCase()?(n.setRequestHeader&&n.setRequestHeader("Content-Type","application/x-www-form-urlencoded"),n.send(e.data)):n.send(null),"XMLHttpRequest"===o?n.onreadystatechange=function(){4===n.readyState&&(n.status>=200&&n.status<400?e.success.call(null,n):e.error.call(null,n))}:(n.onload=function(){e.success.call(null,n)},n.onerror=function(){e.error.call(null,n)})},y=[],l={},w=0;a&&(window.loadFileTimer=l,window.tryTimes=w,window.fileQueues=y);var T=function(e){return e.match(r)[0]},g=function(e,t){d("Do timeout job ==> "+e),l[e]||(l[e]=setTimeout(function(){d("load file timeout..."),t()},u))},L=function(e){l[e]&&(d("clear Timeout job ==> ",e),clearTimeout(l[e]),l[e]=null)},S=function(e,n,o,a,c,i,u){d("Error-Source ==> "+e+" => ("+c+")"),L(e),o.parentNode&&(o.removeEventListener("load",i),o.parentNode.removeChild(o));var l=T(e);if(l&&s(t,l,function(e,n){d("Delete CDN-HOST item ==> "+e),t.splice(n,1)}),0===t.length)return E(a,c),!1;var f="";f=e.replace(r,t[0]),setTimeout(function(){n.callee(f,a,u),d("try next one ==> "+f)},100),m(c,e)},E=function(e,t){if("function"==typeof e){var n={type:t,msg:"资源加载"+("error"===t?"错误":"超时")};e(null,n)}d("=====> ##### Resources Load "+t+"! ##### <======")},b=function(e){return d("Attributes ==> ",e),e?e:!1},A=function(e,t,o){var r=arguments,a=document.createElement("script"),c=function(){t(e)},i=b(o);if(i){var u=i;for(var l in u)a.setAttribute(l,u[l])}a.src=e,a.addEventListener("load",c,!1),a.addEventListener("error",function(){L(e),S(e,r,a,t,"error",c,o)},!1),n.appendChild(a),g(e,function(){S(e,r,a,t,"timeout",c,o)})},k=function(e,t){var n=arguments,o=document.createElement("link");o.rel="stylesheet",o.type="text/css",o.href=e;var r=function(){t(e)};o.addEventListener("load",r,!1),o.addEventListener("error",function(){L(e),S(e,n,o,t,"error",r)},!1),document.head.appendChild(o),g(e,function(){S(e,n,o,t,"timeout",r)})},C=function(e,t){t(e)},_=function(){d("loader on success...");var e=document.querySelectorAll("img");e=f(e),e.length>0&&e.forEach(function(e){if(r.test(e.src)){var t=e.src;t=t.replace(r,o),e.src=t,d("[#IMG]"+e.src)}})},H=function(e,t){if(d("\n===========> ProcessFile... <============="),d(e,"\n\n"),"object"==typeof e&&"string"==typeof e.src&&"object"==typeof e.attrs)A(e.src,t,e.attrs);else if("string"==typeof e){var n=e.match(/\.js|\.css/i)||null;n||C(e,t),n&&n[0].indexOf(".js")>-1?A(e,t):n&&n[0].indexOf(".css")>-1&&k(e,t)}},N=function(t,n){var a=t;!function(){var t=arguments;H(a[0],function(c,i){return i?(n(i,null),!1):(L(c),a.splice(0,1),w=0,d("[###SUCCESS] ==> "+c),d("File-Queue ==> ",a),r.test(c)&&(e.TALKFUN_STATIC_HOST=T(c),o=T(c)),0===a.length?(d("ALL Resource Loaded."),"function"==typeof n&&n(null,"success"),_(),!1):void setTimeout(function(){r.test(a[0])&&o&&(a[0]=a[0].replace(r,o)),t.callee(a[0])},10))})}(a[0])},j=null,O=function(e,t){j||(clearTimeout(j),j=null),e&&e.length>0&&(y=y.concat(e)),j||(j=setTimeout(function(){N(y,t)},100))};e.talkfunLoader={},e.talkfunLoader.parallel=function(){},e.talkfunLoader.series=function(e,t){var n=e||[];n.unshift(i),n&&n.length>0&&O(n,t)}}(window);
+		 -->
+		</script>
+		
+		<!-- @静态资源队列 -->
+		<script data-static-resource="true">
+			
+			// 读取版本
+			var sdkVersion = "3.0",
+				sdkUrl = "//static-2.talk-fun.com/open/maituo_v2/dist/vod/sdk-vod.3.0.min.js";
+
+			// 模版路径配置
+			var coreTpl = "tpl/modules.html";
+
+			// 文件队列
+			var talkfunQueue = null,
+				styles = [],
+				baseStyle = "css/base.css";
+
+			// js
+			talkfunQueue = [
+				"js/libs.min.js",
+				sdkUrl,
+				"js/nouislider.min.js",
+				"js/vod.pc.call_v2.js",
+				"js/jquery.scrollTo.min.js"
+			];
+
+			// css
+			styles = [
+				"css/nouislider.css",
+				"css/main_v2.css",
+				"css/jquery-ui.css",
+				"css/skin/default/default.css"
+			];
+		</script>
+
+		<!-- @加载开始 -->
+		<script type="text/javascript">
+		<!--
+			// CSS前置
+			styles.push(baseStyle);
+			for(var i = 0; i < styles.length; i++){
+				talkfunQueue.unshift(styles[i]);
+			}
+			// init here.
+			window.talkfunLoader.series(talkfunQueue, function(error, res){
+				var fsloader = document.querySelector("#first_loader");
+				if(error){
+					fsloader.innerHTML = error.msg + "(请检查文件加载情况)";
+				}else{
+					document.body.removeChild(fsloader);
+					$("#room").removeClass("hidden");
+				}
+			});
+		-->
+		</script>
+
+
+		<!-- ##Dependent on HTSDK -->
+		<!-- #logs -->
+		<div id="seekAmount"></div>
+		<!-- section_wrap #房间容器-->
+		<div id="room" class="section_wrap hidden pos_r"  style="height: 551px;">
+            <!-- 摄像头区 #视频区域-->
+            <div id="camera_play" class="camera_play camerabg">
+                <div class="video_state hidden">
+                    <span>加载中</span>
+                    <span class="ani_dot"><i></i></span>
+                </div>
+                <div id="mod_camera_player"></div>
+            </div>
+            <!-- 章节&专辑 -->
+            <!--<div class="mod_section_album_list hide" id="album_and_chapter">-->
+                <!--&lt;!&ndash; 章节 &ndash;&gt;-->
+                <!--&lt;!&ndash;<span id="tab_chapter" class="tab_chapter nav">章节</span>&ndash;&gt;-->
+
+                <!--&lt;!&ndash; 章节列表&ndash;&gt;-->
+                <!--<div id="chapter_list" class="mod_chapter_list tab">-->
+                    <!--<div class="chapter_list">-->
+                        <!--<ul id="chapter_listli"></ul>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            <!--</div>-->
+
+            <!-- col_left_side #左侧-->
+            <div id="mod_col_left" class="col_left_side has_position">
+
+                <!-- section_header #头部 -->
+                <!--<div id="header" class="section_header" style="display: none">-->
+                <!--<div class="head headbg">-->
+                <!--<a class="logo" href="http://www.talk-fun.com">-->
+                <!--<img src="http://static-2.talk-fun.com/open/cms_v2/css/manager_v2/ht_icon.png"/>-->
+                <!--</a>-->
+                <!--</div>-->
+                <!--</div>-->
+
+
+
+                <!-- 老师信息(弹窗) -->
+                <!--<div class="teach_infor" id="teach_infor">-->
+                <!--<dl>-->
+                <!--<i class="portrait">-->
+                <!--<img src="css/img/teacher_face_icon.png" alt=""/>-->
+                <!--</i>-->
+                <!--<dt class="mation_name">李成功</dt>-->
+                <!--<dd class="intro_text">他会用幽默和知识征服你</dd>-->
+                <!--</dl>-->
+                <!--<ul class="teacher_get">-->
+                <!--<li class="first">-->
+                <!--<i></i>-->
+                <!--<span>100</span>-->
+                <!--</li>-->
+                <!--<li class="line_to">|</li>-->
+                <!--<li class="last">-->
+                <!--<i></i>-->
+                <!--<span>200</span>-->
+                <!--</li>-->
+                <!--</ul>-->
+                <!--</div>-->
+            </div>
+
+			<!-- section_main #主容器-->
+			<div class="section_main">
+				<!-- col_main #主要部分-->
+				<div id="mod_col_main" class="col_main">
+					<!-- 主信息(房间title) -->
+					<!--<div class="mod_main_header">-->
+						<!--<div class="live_info">-->
+							<!--<i id="lv_state" class="lv_state palayend_state"></i>-->
+							<!--<h2 id="live_title">加载中...</h2>-->
+						<!--</div>-->
+						<!--<div class="live_uinfo">-->
+							<!--<span class="nickname">用户名称</span>-->
+							<!--<span class="line">|</span>           -->
+							<!--<i id="quit" class="quit quit_icon"></i>-->
+						<!--</div>-->
+					<!--</div>-->
+
+					<!-- 主播放器(PPT) -->
+					<div class="mod_main_player_wp" id="mod_player_wrap">
+                        <div class="mask_background">
+                            <span id="loader" class="loader">
+
+                            </span>
+                            <div class="load_state">
+                                <p>正在加载，请稍候...</p>
+                                <p id="load_speed" class="load_speed">(已下载<span id="precent"></span>，速度<span id="speed"></span>)</p>
+                            </div>
+                        </div>
+                        <!-- 继续播放  -->
+                        <div class="continue_play"></div>
+
+                        <!--  快进，后退 -->
+                        <div class="keydown_play"></div>
+
+                        <!-- 重播 -->
+                        <div class="repeat">
+                            <span class="repeat_play"></span>
+                            <!-- <span class="next"></span> -->
+                        </div>
+                        <div id="loading" class="loading_mask"></div><div class="mask_background">
+                            <span id="loader" class="loader">
+
+                            </span>
+                            <div class="load_state">
+                                <p>正在加载，请稍候...</p>
+                                <p id="load_speed" class="load_speed">(已下载<span id="precent"></span>，速度<span id="speed"></span>)</p>
+                            </div>
+                        </div>
+                        <!-- 继续播放  -->
+                        <div class="continue_play"></div>
+
+                        <!--  快进，后退 -->
+                        <div class="keydown_play"></div>
+
+                        <!-- 重播 -->
+                        <div class="repeat">
+                            <span class="repeat_play"></span>
+                            <!-- <span class="next"></span> -->
+                        </div>
+                        <div id="loading" class="loading_mask"></div>
+						<!--主播放器显示区域(PPT)-->
+						<div id="mod_ppt_player" class="mod_ppt_main_player">
+							<div class="mod_main_player"  id="mod_main_player"></div>	
+						</div>
+					</div>
+					
+					<!-- 左右工具栏  #carousel_left-->
+					<!--<div class="carousel left">-->
+						<!--<i id="left_arrow" class="arrow ln_arrow"></i>-->
+					<!--</div>-->
+					<!--<div class="carousel right">-->
+						<!--<i id="right_arrow" class="arrow rn_arrow"></i>-->
+					<!--</div>-->
+
+				</div>
+			</div>
+
+			<!-- col_right_side #右侧-->
+			<div id="mod_col_right" class="col_right_side">
+				<!-- 提问与聊天的切换 #tab_change -->
+				<div class="tab_change">
+					<ul id="chat_nav" class="clearboth">
+						<li class="tab_n1">
+							<span class="chat">聊天</span>
+						</li>
+						<li class="tab_n2" style="border: 1px solid #333; border-top: 0; border-bottom: 0;">
+							<span>提问</span>
+						</li>
+                        <li class="tab_n3 current">
+                            <span>目录</span>
+                        </li>
+					</ul>
+				</div>
+				<!--聊天列表-->
+				<div id="chat_list" class="mod_chat_list tab">
+					<div class="list_chat tab_chat">
+						<ul id="chat_listli"></ul>
+					    <!--<div id="chat_operation" class="chat_operation">-->
+					    	<!--<div class="hide_flower comm">-->
+			                    <!--<i></i>-->
+			                    <!--<span>不看鲜花和表情</span>-->
+			                <!--</div>-->
+			                <!--<div class="stop_chat_scroll comm">-->
+			                    <!--<i></i>-->
+			                    <!--<span>停止滚动</span>-->
+			                <!--</div>-->
+					    <!--</div>-->
+					</div>							
+				</div>
+				<!-- 提问列表-->
+				<div id="question_list" class="mod_question_list tab">
+					<div class="question_chat tab_chat list_question">
+						<ul id="qustions_listli"></ul>
+					</div>						
+				</div>
+			</div>
+
+			<!-- footer #底部 -->
+			<div id="footer" class="section_footer">
+				<!-- 切换源选项 -->
+				<div class="switch_warp">
+					<ul id="switch_list">
+
+					</ul>
+				</div>
+				<!-- 移动某个点显示时间点 -->
+				<div class="current_time">
+					<span class="point_time"></span>
+					<div class="triangle-down">
+						
+					</div>
+				</div>
+				<!-- 主区域底部 #mod_footer -->
+				<div class="mod_footer pabsolute">
+					<div class="mod_ctrs">
+						<!-- == seek == -->
+						<div id="mod_seek" class="seek_con">
+							<div id="seek_range"></div>
+						</div>
+					</div>
+					<!-- 按钮区域 -->
+					<div class="footer_btn">
+						<div class="footer_left">
+							<i class="paly_state pause" id="btn_pp"></i>
+							<i class="close_play" id="close_play"></i>
+							<div class="video_time">
+								<span id="cur_time" class="ctr_cur_time">00:00:00</span>
+								<span class="ctr_cur_time">/</span>
+								<span id="totle_time" class="ctr_cur_time">00:00:00</span>
+							</div>
+							<span class="suona"></span>
+							<span  class="player">
+								<span class="pla_icon"></span>
+							</span>
+							<span class="shift">
+								<i class="pla_icon"></i>
+							</span>
+						</div>
+						<div class="footer_right">
+							<!--  切换源 -->
+							<i title="网络源选择" class="switch_source" id="switch_source">切换网络</i>
+							<!-- 视频切换 -->
+							<i class="video_location" id="lca_change">切换窗口</i>
+							<!-- 声音图标 -->
+							<i id="vioce_contorl" class="voice enable"></i>
+							<!-- 音频滑块 -->
+							<div id="void_range" >
+							</div>
+							<!-- 全屏图标 -->
+							<i class="full_screen s_screen" id="full_screen"></i>
+						</div>
+					</div>  
+				</div>
+			</div>
+		<!-- ### Room End ### -->
+		</div>
+		<!-- @模版加载 -->
+		<div id="template_loader"></div>
+	</body>
+
+</html>
